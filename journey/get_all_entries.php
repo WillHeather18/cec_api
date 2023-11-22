@@ -1,13 +1,10 @@
 <?php
 include "../connection.php";
 
-$journeyDate = $_POST['selectedDate'];
-$journeyMonth = date('m', strtotime($journeyDate)); // Extract the month from the selected date
-
-$query = "SELECT journey_type, distance_travelled, journey_date FROM journeys WHERE MONTH(journey_date) = '$journeyMonth'";
+$query = "SELECT * FROM journeys";
 $result = mysqli_query($conn, $query);
 
-if(mysqli_num_rows($result) > 0)
+if($result)
 {  
     $journeys = mysqli_fetch_all($result, MYSQLI_ASSOC);
     echo json_encode(array(

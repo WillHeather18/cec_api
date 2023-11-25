@@ -3,8 +3,9 @@ include "../connection.php";
 
 $journeyDate = $_POST['selectedDate'];
 $journeyMonth = date('m', strtotime($journeyDate)); // Extract the month from the selected date
+$journeyYear = date('Y', strtotime($journeyDate)); // Extract the year from the selected date
 
-$query = "SELECT * FROM journeys WHERE MONTH(journey_date) = '$journeyMonth'";
+$query = "SELECT * FROM journeys WHERE MONTH(journey_date) = '$journeyMonth' AND YEAR(journey_date) = '$journeyYear'";
 $result = mysqli_query($conn, $query);
 
 if(mysqli_num_rows($result) > 0)
@@ -19,7 +20,6 @@ else
 {
     echo json_encode(array("success" =>false));
 }
-
 // Close the database connection
 mysqli_close($conn);
 ?>

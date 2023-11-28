@@ -4,17 +4,28 @@ include "../connection.php";
 $userUsername = $_POST['username'];
 $userPassword = $_POST['password'];
 
-// Assuming you have a table named 'users' with columns 'username' and 'password'
-$query = "INSERT INTO users (username, password) VALUES ('$userUsername', '$userPassword')";
-$result = mysqli_query($conn, $query);
+$checkQuery = "SELECT * FROM users WHERE username = '$userUsername'";
+$checkResult = mysqli_query($conn, $checkQuery);
 
-if($result)
-{  
-    echo json_encode(array("success" =>true));
+if($checkResult->num_rows > 0)
+{
+    // Username already exists
+    echo json_encode(array("success" => false, "message" => "Username already exists"));
+    exit();
 }
 else
 {
-    echo json_encode(array("success" =>false));
+    $query = "INSERT INTO users (username, password) VALUES ('$userUsername', '$userPassword')";
+    $result = mysqli_query($conn, $query);
+
+    if($result)
+    {  
+        echo json_encode(array("success" =>true, "message" => "User created"));
+    }
+    else
+    {
+        echo json_encode(array("success" =>false, "message" => "User not created"));
+    }
 }
 
 // Close the database connection
